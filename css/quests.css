@@ -1,0 +1,280 @@
+.quest-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: 99px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  text-transform: uppercase;
+}
+
+.filter-btn:hover {
+  border-color: var(--border-glow);
+  color: var(--text-primary);
+}
+
+.filter-btn.active {
+  background: linear-gradient(90deg, rgba(0,212,255,0.2), rgba(176,110,243,0.2));
+  border-color: var(--primary);
+  color: var(--primary);
+  text-shadow: 0 0 8px var(--primary-glow);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+#quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quest-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,212,255,0.12);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quest-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.quest-card[data-cat="study"]::before { background: var(--cat-study); box-shadow: 0 0 8px var(--cat-study); }
+.quest-card[data-cat="exercise"]::before { background: var(--cat-exercise); box-shadow: 0 0 8px var(--cat-exercise); }
+.quest-card[data-cat="reading"]::before { background: var(--cat-reading); box-shadow: 0 0 8px var(--cat-reading); }
+.quest-card[data-cat="learning"]::before { background: var(--cat-learning); box-shadow: 0 0 8px var(--cat-learning); }
+.quest-card[data-cat="personal"]::before { background: var(--cat-personal); box-shadow: 0 0 8px var(--cat-personal); }
+
+.quest-card:hover {
+  border-color: rgba(0,212,255,0.35);
+  transform: translateX(4px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 15px rgba(0,212,255,0.05);
+}
+
+.quest-card.completed {
+  opacity: 0.5;
+}
+
+.quest-card.completing {
+  animation: questCompletePulse 0.6s ease-out;
+}
+
+@keyframes questCompletePulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.02); border-color: var(--success); box-shadow: 0 0 20px rgba(0,245,160,0.5); }
+  100% { transform: scale(1); }
+}
+
+.quest-icon {
+  font-size: 28px;
+  width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.quest-body {
+  flex: 1;
+}
+
+.quest-name {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.quest-name.done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.quest-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.quest-cat-badge {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+.quest-card[data-cat="study"] .quest-cat-badge { background: rgba(142,197,252,0.15); color: var(--cat-study); border: 1px solid var(--cat-study); }
+.quest-card[data-cat="exercise"] .quest-cat-badge { background: rgba(255,107,53,0.15); color: var(--cat-exercise); border: 1px solid var(--cat-exercise); }
+.quest-card[data-cat="reading"] .quest-cat-badge { background: rgba(0,245,160,0.15); color: var(--cat-reading); border: 1px solid var(--cat-reading); }
+.quest-card[data-cat="learning"] .quest-cat-badge { background: rgba(176,110,243,0.15); color: var(--cat-learning); border: 1px solid var(--cat-learning); }
+.quest-card[data-cat="personal"] .quest-cat-badge { background: rgba(255,215,0,0.15); color: var(--cat-personal); border: 1px solid var(--cat-personal); }
+
+.quest-diff-badge {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.quest-card[data-diff="easy"] .quest-diff-badge { background: rgba(0,245,160,0.1); color: var(--diff-easy); }
+.quest-card[data-diff="medium"] .quest-diff-badge { background: rgba(255,215,0,0.1); color: var(--diff-medium); }
+.quest-card[data-diff="hard"] .quest-diff-badge { background: rgba(255,77,109,0.1); color: var(--diff-hard); }
+
+.quest-rewards {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.quest-xp {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--xp-color);
+  text-shadow: 0 0 5px var(--xp-glow);
+}
+
+.quest-coin {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 5px var(--gold-glow);
+}
+
+.quest-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.quest-complete-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,212,255,0.25);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.quest-complete-btn:hover {
+  border-color: var(--success);
+  color: var(--success);
+  box-shadow: 0 0 10px rgba(0,245,160,0.3);
+}
+
+.quest-complete-btn.done {
+  background: linear-gradient(135deg, var(--success), #00d4ff);
+  border-color: var(--success);
+  color: white;
+}
+
+.quest-delete-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.quest-delete-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(255,77,109,0.1);
+}
+
+.category-select, .difficulty-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cat-btn {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,212,255,0.15);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.cat-btn.active {
+  background: rgba(0,212,255,0.15);
+  border-color: var(--primary);
+  color: var(--primary);
+  text-shadow: 0 0 5px var(--primary-glow);
+}
+
+.diff-btn {
+  flex: 1;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.diff-label {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.diff-reward {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.diff-btn[data-diff="easy"].active { border-color: var(--diff-easy); background: rgba(0,245,160,0.1); }
+.diff-btn[data-diff="medium"].active { border-color: var(--diff-medium); background: rgba(255,215,0,0.1); }
+.diff-btn[data-diff="hard"].active { border-color: var(--diff-hard); background: rgba(255,77,109,0.1); }

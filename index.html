@@ -1,0 +1,285 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Life RPG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Exo+2:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/quests.css">
+  <link rel="stylesheet" href="css/achievements.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/stats.css">
+  <link rel="stylesheet" href="css/ai-coach.css">
+</head>
+<body>
+  <div id="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">⚔️</div>
+      <h1 class="loading-title">Real-Life RPG</h1>
+      <div class="loading-bar-wrap"><div id="loading-bar"></div></div>
+      <p class="loading-text">Preparing your adventure...</p>
+    </div>
+  </div>
+  <div id="app" class="hidden">
+    <header id="hud">
+      <div class="hud-left">
+        <div class="hud-avatar-wrap">
+          <div id="hud-avatar" class="hud-avatar">🧙</div>
+          <div id="hud-level" class="hud-level-badge">Lv.1</div>
+        </div>
+        <div class="hud-info">
+          <div class="hud-top">
+            <div id="hud-name" class="hud-name">Hero</div>
+            <div id="hud-title" class="hud-title-text">Novice</div>
+          </div>
+          <div class="xp-bar-outer"><div id="xp-bar" class="xp-bar-inner"></div></div>
+          <div id="xp-label" class="xp-label">0 / 100 XP</div>
+        </div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-stat-pill"><span class="pill-icon">🪙</span><span id="hud-coins" class="pill-val">0</span></div>
+        <div id="hud-streak-pill" class="hud-stat-pill"><span class="pill-icon">🔥</span><span id="hud-streak" class="pill-val">0</span></div>
+        <button id="hud-settings-btn" class="hud-menu-btn">⚙️</button>
+      </div>
+    </header>
+    <nav id="nav">
+      <button class="nav-btn active" data-tab="dashboard"><span class="nav-icon">🏰</span><span class="nav-label">Dashboard</span></button>
+      <button class="nav-btn" data-tab="quests"><span class="nav-icon">📜</span><span class="nav-label">Quests</span></button>
+      <button class="nav-btn" data-tab="achievements"><span class="nav-icon">🏆</span><span class="nav-label">Achievements</span></button>
+      <button class="nav-btn" data-tab="shop"><span class="nav-icon">🏪</span><span class="nav-label">Shop</span></button>
+      <button class="nav-btn" data-tab="stats"><span class="nav-icon">📈</span><span class="nav-label">Stats</span></button>
+      <button class="nav-btn" data-tab="ai"><span class="nav-icon">🤖</span><span class="nav-label">AI Coach</span></button>
+    </nav>
+    <main id="main-content">
+      <section id="tab-dashboard" class="tab-panel active">
+        <div class="dashboard-grid">
+          <div class="card welcome-card" id="welcome-card">
+            <div class="welcome-avatar" id="welcome-avatar">🧙</div>
+            <div class="welcome-body">
+              <h3 class="welcome-greeting" id="welcome-name">Welcome, Hero!</h3>
+              <p class="welcome-sub" id="welcome-subtitle">Ready to conquer today's quests?</p>
+              <div class="welcome-streak"><span>🔥</span><span id="welcome-streak-count">0</span><span>day streak</span></div>
+            </div>
+          </div>
+          <div class="card daily-progress-card">
+            <div class="card-header"><h3>Daily Focus</h3><span id="dashboard-date" class="text-muted"></span></div>
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle cx="60" cy="60" r="50" class="ring-bg"/>
+              <circle cx="60" cy="60" r="50" class="ring-fill" id="daily-ring"/>
+              <text x="60" y="55" text-anchor="middle" class="ring-percent" id="daily-percent">0%</text>
+              <text x="60" y="72" text-anchor="middle" class="ring-sub">Complete</text>
+            </svg>
+            <div class="daily-counts"><span id="daily-completed">0</span> / <span id="daily-total">0</span> Quests</div>
+          </div>
+          <div class="card quick-stats-card">
+            <div class="card-header"><h3>Overview</h3></div>
+            <div class="stats-grid-mini">
+              <div class="stat-mini"><div id="stat-total-quests" class="stat-mini-val">0</div><div class="stat-mini-label">Quests</div></div>
+              <div class="stat-mini"><div id="stat-total-xp" class="stat-mini-val">0</div><div class="stat-mini-label">Total XP</div></div>
+              <div class="stat-mini"><div id="stat-total-coins" class="stat-mini-val">0</div><div class="stat-mini-label">Coins</div></div>
+              <div class="stat-mini"><div id="stat-achievements" class="stat-mini-val">0</div><div class="stat-mini-label">Achievements</div></div>
+            </div>
+          </div>
+          <div class="card todays-quests-card"><div class="card-header"><h3>Today's Quests</h3></div><div id="dash-quest-preview"></div></div>
+          <div class="card recent-achievements-card"><div class="card-header"><h3>Recent Achievements</h3></div><div id="dash-recent-achievements"></div></div>
+          <div class="card level-progress-card">
+            <div class="card-header"><h3>Level Progress</h3></div>
+            <div class="level-display">
+              <div id="dash-level-circle" class="level-circle">1</div>
+              <div class="level-info">
+                <div id="dash-level-title" class="level-title">Novice</div>
+                <div class="level-xp-bar-wrap"><div id="dash-xp-bar" class="level-xp-bar" style="width:0%"></div></div>
+                <div id="dash-xp-text" class="level-xp-text">0 / 100 XP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="tab-quests" class="tab-panel">
+        <div class="tab-header"><h2 class="tab-title">Quests Log</h2><button id="add-quest-btn" class="btn btn-primary">+ New Quest</button></div>
+        <div class="quest-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="study">Study</button>
+          <button class="filter-btn" data-filter="exercise">Exercise</button>
+          <button class="filter-btn" data-filter="reading">Reading</button>
+          <button class="filter-btn" data-filter="learning">Learning</button>
+          <button class="filter-btn" data-filter="personal">Personal</button>
+        </div>
+        <div id="quest-list"></div>
+        <div id="quest-empty" class="empty-state empty-state-big hidden">
+          <div class="empty-icon">📜</div><h3>No Quests Found</h3><p>Time to set some goals!</p>
+          <button id="add-quest-empty-btn" class="btn btn-secondary mt-16">Create Quest</button>
+        </div>
+      </section>
+      <section id="tab-achievements" class="tab-panel">
+        <div class="tab-header"><h2 class="tab-title">Trophy Room</h2><div class="achievement-progress-text"><span id="ach-unlocked">0</span> / <span id="ach-total">22</span> Unlocked</div></div>
+        <div class="achievement-progress-bar-wrap"><div id="ach-progress-bar" style="width:0%"></div></div>
+        <div id="achievements-grid"></div>
+      </section>
+      <section id="tab-shop" class="tab-panel">
+        <div class="tab-header"><h2 class="tab-title">Rewards Shop</h2><div class="shop-balance">🪙 <span id="shop-coins-display">0</span> coins</div></div>
+        <div class="shop-tabs">
+          <button class="shop-tab-btn active" data-shop-tab="rewards">Presets</button>
+          <button class="shop-tab-btn" data-shop-tab="custom">Custom Rewards</button>
+        </div>
+        <div id="shop-rewards-grid"></div>
+        <div id="shop-custom-section" class="hidden">
+          <button id="add-reward-btn" class="btn btn-primary">+ Create Custom Reward</button>
+          <div id="custom-rewards-grid"></div>
+          <div id="custom-rewards-empty" class="empty-state hidden">No custom rewards yet.</div>
+        </div>
+      </section>
+      <section id="tab-stats" class="tab-panel">
+        <div class="tab-header"><h2 class="tab-title">Adventurer Stats</h2></div>
+        <div class="stats-grid">
+          <div class="stat-summary-row">
+            <div class="card stat-card"><div class="stat-card-icon">⭐</div><div id="stats-total-xp" class="stat-card-val">0</div><div class="stat-card-label">Total XP</div></div>
+            <div class="card stat-card"><div class="stat-card-icon">📜</div><div id="stats-total-quests" class="stat-card-val">0</div><div class="stat-card-label">Quests Done</div></div>
+            <div class="card stat-card"><div class="stat-card-icon">🔥</div><div id="stats-best-streak" class="stat-card-val">0</div><div class="stat-card-label">Best Streak</div></div>
+            <div class="card stat-card"><div class="stat-card-icon">💰</div><div id="stats-total-coins-earned" class="stat-card-val">0</div><div class="stat-card-label">Coins Earned</div></div>
+          </div>
+          <div class="card chart-card"><div class="card-header"><h3>XP Progression</h3></div><div class="chart-wrap"><canvas id="xp-chart"></canvas></div></div>
+          <div class="card chart-card"><div class="card-header"><h3>Quests History</h3></div><div class="chart-wrap"><canvas id="quests-chart"></canvas></div></div>
+          <div class="charts-row">
+            <div class="card chart-card chart-card-half"><div class="card-header"><h3>Quests by Category</h3></div><div class="chart-wrap chart-wrap-small"><canvas id="category-chart"></canvas></div></div>
+            <div class="card chart-card chart-card-half"><div class="card-header"><h3>Weekly Summary</h3></div><div id="weekly-summary"></div></div>
+          </div>
+        </div>
+      </section>
+      <section class="tab-panel" id="tab-ai">
+        <div id="ai-setup" class="ai-setup-wrapper">
+          <div class="ai-setup-card">
+            <span class="ai-setup-icon">🤖</span>
+            <h3>AI Coach Awaits</h3>
+            <p>Enter your free Gemini API key to unlock personalized daily coaching, productivity insights, and your AI quest guide.</p>
+            <div class="form-group"><label class="form-label">Gemini API Key</label><input type="password" id="ai-key-input" class="form-input" placeholder="AIza..."></div>
+            <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="ai-get-key-link">Get free API key at aistudio.google.com</a>
+            <button class="btn btn-primary" id="ai-save-key-btn" style="width:100%;margin-top:8px;">Activate AI Coach</button>
+          </div>
+        </div>
+        <div id="ai-content" class="hidden">
+          <div class="tab-header"><h2 class="tab-title">AI Coach</h2><button class="btn btn-secondary btn-small" id="ai-refresh-btn">Refresh</button></div>
+          <div class="ai-coach-grid">
+            <div class="card ai-brief-card">
+              <div id="ai-brief-loading" class="ai-loading"><div class="ai-spinner"></div><p>Generating your daily brief...</p></div>
+              <div id="ai-brief-content" class="hidden"><div class="ai-brief-header"><span class="ai-brief-icon">📋</span><h3>Daily Motivational Brief</h3></div><p id="ai-brief-text"></p></div>
+            </div>
+            <div class="card ai-focus-card">
+              <div id="ai-focus-loading" class="ai-loading"><div class="ai-spinner"></div><p>Finding your focus quest...</p></div>
+              <div id="ai-focus-content" class="hidden">
+                <h3>Focus Quest of the Day</h3>
+                <div class="ai-focus-quest"><span id="ai-focus-icon">⚔️</span><div><div id="ai-focus-name" class="ai-focus-name"></div><div id="ai-focus-reason" class="ai-focus-reason"></div></div></div>
+              </div>
+            </div>
+            <div id="ai-insights-row" class="ai-insights-row"></div>
+            <div class="card ai-chat-card">
+              <div class="ai-chat-header"><h3>Ask Your Coach</h3></div>
+              <div id="ai-chat-messages"></div>
+              <div class="ai-chat-input-row">
+                <input type="text" id="ai-chat-input" class="form-input" placeholder="Ask anything..." maxlength="300">
+                <button class="btn btn-primary btn-small" id="ai-chat-send">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <div id="add-quest-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header"><h3>New Quest</h3><button id="close-quest-modal" class="modal-close">x</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Quest Name</label><input type="text" id="quest-name-input" class="form-input" placeholder="E.g., Read 10 pages"></div>
+        <div class="form-group"><label class="form-label">Description (Optional)</label><textarea id="quest-desc-input" class="form-input form-textarea" placeholder="Add some details..."></textarea></div>
+        <div class="form-group"><label class="form-label">Category</label>
+          <div id="category-select" class="category-select">
+            <button class="cat-btn active" data-cat="study">Study</button>
+            <button class="cat-btn" data-cat="exercise">Exercise</button>
+            <button class="cat-btn" data-cat="reading">Reading</button>
+            <button class="cat-btn" data-cat="learning">Learning</button>
+            <button class="cat-btn" data-cat="personal">Personal</button>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Difficulty</label>
+          <div id="difficulty-select" class="difficulty-select">
+            <button class="diff-btn" data-diff="easy"><span class="diff-label">Easy</span><span class="diff-reward">30 XP / 10 coins</span></button>
+            <button class="diff-btn active" data-diff="medium"><span class="diff-label">Medium</span><span class="diff-reward">60 XP / 20 coins</span></button>
+            <button class="diff-btn" data-diff="hard"><span class="diff-label">Hard</span><span class="diff-reward">120 XP / 40 coins</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"><button id="cancel-quest-btn" class="btn btn-secondary">Cancel</button><button id="save-quest-btn" class="btn btn-primary">Save Quest</button></div>
+    </div>
+  </div>
+
+  <div id="add-reward-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header"><h3>New Custom Reward</h3><button id="close-reward-modal" class="modal-close">x</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Reward Name</label><input type="text" id="reward-name-input" class="form-input" placeholder="E.g., Extra hour of TV"></div>
+        <div class="form-group"><label class="form-label">Description (Optional)</label><input type="text" id="reward-desc-input" class="form-input" placeholder="Short description"></div>
+        <div class="form-group"><label class="form-label">Cost (Coins)</label><input type="number" id="reward-cost-input" class="form-input" placeholder="50" min="1"></div>
+        <div class="form-group"><label class="form-label">Icon (Emoji)</label><input type="text" id="reward-icon-input" class="form-input" placeholder="🎁" maxlength="2"></div>
+      </div>
+      <div class="modal-footer"><button id="cancel-reward-btn" class="btn btn-secondary">Cancel</button><button id="save-reward-btn" class="btn btn-primary">Create Reward</button></div>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header"><h3>Game Settings</h3><button id="close-settings-modal" class="modal-close">x</button></div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Hero Name</label><input type="text" id="settings-name-input" class="form-input" placeholder="Enter your name"></div>
+        <div class="form-group" style="margin-top:20px;">
+          <label class="form-label">Gemini API Key (AI Coach)</label>
+          <input type="password" id="settings-ai-key" class="form-input" placeholder="AIza... (stored in browser only)">
+          <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Stored only in your browser.</p>
+        </div>
+        <div class="form-group" style="margin-top:24px;">
+          <label class="form-label" style="color:var(--danger)">Danger Zone</label>
+          <button id="reset-game-btn" class="btn btn-danger" style="width:100%">Reset All Game Data</button>
+          <p style="margin-top:8px;font-size:13px;color:var(--text-muted)">This will permanently delete all progress.</p>
+        </div>
+      </div>
+      <div class="modal-footer"><button id="close-settings-modal-btn" class="btn btn-secondary">Close</button><button id="save-settings-btn" class="btn btn-primary">Save Changes</button></div>
+    </div>
+  </div>
+
+  <div id="levelup-modal" class="modal-overlay hidden">
+    <div class="modal levelup-modal">
+      <div id="levelup-particles" class="levelup-particles"></div>
+      <div class="levelup-content">
+        <div id="levelup-icon" class="levelup-icon">👑</div>
+        <h2 class="levelup-title">LEVEL UP!</h2>
+        <div id="levelup-level" class="levelup-level">Level 2</div>
+        <div id="levelup-title-earned" class="levelup-title-earned">Title Unlocked: Adventurer</div>
+        <button id="levelup-close" class="btn btn-primary btn-large">Continue Adventure</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/events.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/modules/player.js"></script>
+  <script src="js/modules/quests.js"></script>
+  <script src="js/modules/achievements.js"></script>
+  <script src="js/modules/shop.js"></script>
+  <script src="js/modules/stats.js"></script>
+  <script src="js/ui/notifications.js"></script>
+  <script src="js/ui/router.js"></script>
+  <script src="js/ui/dashboard.js"></script>
+  <script src="js/modules/ai.js"></script>
+  <script src="js/ui/ai-coach.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
