@@ -16,7 +16,7 @@ getDailyQuests() {
 },
   
   add(name, category, difficulty, description = '') {
-    const xpMap = { easy: 30, medium: 60, hard: 120 };
+   const xpMap = { easy: 30, medium: 60, hard: 120, legendary: 200 };
     const coinMap = { easy: 10, medium: 20, hard: 40 };
     const quest = {
       id: Date.now().toString(),
