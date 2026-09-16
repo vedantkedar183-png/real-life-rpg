@@ -30,13 +30,6 @@ getDailyQuests() {
       completedAt: null,
       createdAt: Date.now()
     };
-    State.quests.push(quest);
-    State.save();
-    EventBus.emit('quest:added', { quest });
-    Achievements.check('custom_quest');
-    return quest;
-  },
-  
   complete(id) {
     const quest = State.quests.find(q => q.id === id);
     if (!quest || quest.completed) return false;
