@@ -56,8 +56,9 @@ const Notifications = {
     if (!container) return;
     container.innerHTML = '';
     const colors = ['#00d4ff','#b06ef3','#ffd700','#ff6b9d','#00f5a0'];
-    for (let i = 0; i < 20; i++) {
-      const p = document.createElement('div');
+   const particleCount = 20;
+
+for (let i = 0; i < particleCount; i++) {
       p.className = 'particle';
       const angle = (Math.random() * 360) * Math.PI / 180;
       const dist = 80 + Math.random() * 120;
