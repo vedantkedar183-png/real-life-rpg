@@ -11,6 +11,8 @@ const Router = {
   },
   
   navigateTo(tab) {
+    if (!tab) return;
+if (tab === this.currentTab) return;
     // Update nav buttons
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tab);
