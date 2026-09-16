@@ -5,7 +5,15 @@ const Quests = {
     const all = State.quests;
     if (!category || category === 'all') return all;
     return all.filter(q => q.category === category);
-  },
+},
+
+getDailyQuests() {
+    const today = new Date().toDateString();
+
+    return State.quests.filter(q =>
+        new Date(q.createdAt).toDateString() === today
+    );
+},
   
   add(name, category, difficulty, description = '') {
     const xpMap = { easy: 30, medium: 60, hard: 120 };
